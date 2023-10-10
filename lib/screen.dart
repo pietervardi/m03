@@ -150,9 +150,20 @@ class _ScreenState extends State<Screen> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                for (var item in tmp.getShoppingList) {
+                  HistoryList historyItem = HistoryList(
+                    item.id,
+                    item.name,
+                    item.sum,
+                    DateTime.now(),
+                  );
+                  await _dBhelper.insertHistoryList(historyItem);
+                }
                 _dBhelper.deleteAllShoppingList();
-                Navigator.pop(context);
+                if(mounted) {
+                  Navigator.pop(context);
+                }
                 tmp.setShoppingList = [];
               },
               child: const Text('Delete'),
